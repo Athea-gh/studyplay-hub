@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyPlay Hub - Learn Through Play</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+'study-blue': '#3B82F6',
+'study-yellow': '#FCD34D',
+'study-purple': '#8B5CF6'
+}
+}
+}
+}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+body { font-family: 'Poppins', sans-serif; }
+
+.gradient-bg {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-hover {
+transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+transform: translateY(-5px);
+box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+animation: fillProgress 2s ease-in-out;
+}
+
+@keyframes fillProgress {
+from { width: 0%; }
+to { width: var(--progress-width); }
+}
+
+.bounce-in {
+animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+0% { transform: scale(0.3); opacity: 0; }
+50% { transform: scale(1.05); }
+70% { transform: scale(0.9); }
+100% { transform: scale(1); opacity: 1; }
+}
+
+.quiz-option {
+transition: all 0.3s ease;
+cursor: pointer;
+}
+
+.quiz-option:hover {
+background-color: #EBF8FF;
+border-color: #3B82F6;
+}
+
+.quiz-option.correct {
+background-color: #D1FAE5;
+border-color: #10B981;
+}
+
+.quiz-option.incorrect {
+background-color: #FEE2E2;
+border-color: #EF4444;
+}
+</style>
+</head>
+<body class="bg-gray-50">
+<!-- Navigation -->
+<nav class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+<div class="container mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<div class="text-2xl">🎮</div>
+<h1 class="text-2xl font-bold">StudyPlay Hub</h1>
+</div>
+<div class="hidden md:flex space-x-6">
+<a href="#home" class="hover:text-study-yellow transition-colors">Home</a>
+<a href="#games" class="hover:text-study-yellow transition-colors">Games</a>
+<a href="#projects" class="hover:text-study-yellow transition-colors">Projects</a>
+<a href="#resources" class="hover:text-study-yellow transition-colors">Resources</a>
+<a href="#contact" class="hover:text-study-yellow transition-colors">Contact</a>
+</div>
+<button id="mobileMenuBtn" class="md:hidden">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+</svg>
+</button>
+</div>
+<div id="mobileMenu" class="hidden md:hidden mt-4 space-y-2">
+<a href="#home" class="block hover:text-study-yellow transition-colors">Home</a>
+<a href="#games" class="block hover:text-study-yellow transition-colors">Games</a>
+<a href="#projects" class="block hover:text-study-yellow transition-colors">Projects</a>
+<a href="#resources" class="block hover:text-study-yellow transition-colors">Resources</a>
+<a href="#contact" class="block hover:text-study-yellow transition-colors">Contact</a>
+</div>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="gradient-bg text-white py-20">
+<div class="container mx-auto px-6 text-center">
+<div class="bounce-in">
+<h2 class="text-5xl font-bold mb-6">Learn Through Play! 🚀</h2>
+<p class="text-xl mb-8 max-w-2xl mx-auto">Transform your study sessions with interactive games, collaborative projects, and engaging resources designed for high school students.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button onclick="scrollToSection('games')" class="bg-study-yellow text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-yellow-300 transition-colors">
+Start Playing 🎯
+</button>
+<button onclick="scrollToSection('projects')" class="border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-gray-800 transition-colors">
+View Projects 📚
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Study Tip of the Week -->
+<section class="py-12 bg-white">
+<div class="container mx-auto px-6">
+<div class="bg-gradient-to-r from-study-blue to-study-purple text-white rounded-2xl p-8 text-center">
+<h3 class="text-2xl font-bold mb-4">💡 Study Tip of the Week</h3>
+<p class="text-lg">"Use the Pomodoro Technique: Study for 25 minutes, then take a 5-minute break. Your brain will thank you!"</p>
+</div>
+</div>
+</section>
+
+<!-- Interactive Games Section -->
+<section id="games" class="py-16 bg-gray-50">
+<div class="container mx-auto px-6">
+<h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Interactive Study Games 🎮</h2>
+
+<!-- Math Quiz Game -->
+<div class="max-w-4xl mx-auto mb-12">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h3 class="text-2xl font-bold mb-6 text-center text-study-blue">Math Challenge Quiz</h3>
+<div id="mathQuiz" class="space-y-6">
+<div class="text-center">
+<div class="text-lg font-semibold mb-4">Question <span id="questionNumber">1</span> of 3</div>
+<div class="bg-gray-100 rounded-lg p-6 mb-6">
+<h4 id="questionText" class="text-xl font-semibold mb-4">What is 15 × 8?</h4>
+<div id="quizOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<button class="quiz-option border-2 border-gray-300 rounded-lg p-4 text-left" onclick="selectAnswer(this, false)">A) 110</button>
+<button class="quiz-option border-2 border-gray-300 rounded-lg p-4 text-left" onclick="selectAnswer(this, true)">B) 120</button>
+<button class="quiz-option border-2 border-gray-300 rounded-lg p-4 text-left" onclick="selectAnswer(this, false)">C) 130</button>
+<button class="quiz-option border-2 border-gray-300 rounded-lg p-4 text-left" onclick="selectAnswer(this, false)">D) 125</button>
+</div>
+</div>
+<div id="quizFeedback" class="hidden mb-4 p-4 rounded-lg"></div>
+<button id="nextQuestion" class="hidden bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors" onclick="nextQuestion()">Next Question</button>
+<div id="quizComplete" class="hidden text-center">
+<h4 class="text-2xl font-bold text-green-600 mb-4">Quiz Complete! 🎉</h4>
+<p class="text-lg mb-4">Your Score: <span id="finalScore" class="font-bold text-study-blue"></span></p>
+<button onclick="restartQuiz()" class="bg-study-yellow text-gray-800 px-6 py-2 rounded-lg hover:bg-yellow-300 transition-colors">Try Again</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Game Cards -->
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+<div class="text-4xl mb-4 text-center">🧮</div>
+<h3 class="text-xl font-bold mb-3 text-center">Math Puzzles</h3>
+<p class="text-gray-600 mb-4">Challenge yourself with interactive math problems and get instant feedback.</p>
+<button onclick="showMathPuzzle()" class="w-full bg-study-blue text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">Play Now</button>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+<div class="text-4xl mb-4 text-center">📚</div>
+<h3 class="text-xl font-bold mb-3 text-center">Vocabulary Builder</h3>
+<p class="text-gray-600 mb-4">Expand your vocabulary with fun flashcard games and word challenges.</p>
+<button onclick="showVocabGame()" class="w-full bg-study-purple text-white py-2 rounded-lg hover:bg-purple-600 transition-colors">Start Learning</button>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+<div class="text-4xl mb-4 text-center">🔬</div>
+<h3 class="text-xl font-bold mb-3 text-center">Science Trivia</h3>
+<p class="text-gray-600 mb-4">Test your knowledge with exciting science facts and experiments.</p>
+<button onclick="showScienceTrivia()" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Explore</button>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+<div class="text-4xl mb-4 text-center">🃏</div>
+<h3 class="text-xl font-bold mb-3 text-center">Create Flashcards</h3>
+<p class="text-gray-600 mb-4">Make your own custom flashcards for any subject and study with them.</p>
+<button onclick="showFlashcardCreator()" class="w-full bg-study-yellow text-gray-800 py-2 rounded-lg hover:bg-yellow-300 transition-colors">Create Cards</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Project Showcase -->
+<section id="projects" class="py-16 bg-white">
+<div class="container mx-auto px-6">
+<h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Project Showcase Gallery 🏆</h2>
+
+<!-- Featured Project of the Month -->
+<div class="max-w-4xl mx-auto mb-12">
+<div class="bg-gradient-to-r from-study-blue to-study-purple text-white rounded-2xl p-8">
+<div class="flex items-center justify-center mb-4">
+<div class="text-4xl mr-4">🏆</div>
+<h3 class="text-2xl font-bold">Featured Project of the Month</h3>
+</div>
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<div>
+<h4 class="text-xl font-bold mb-3">Solar System Simulator</h4>
+<p class="mb-4">An interactive web-based simulation showing planetary orbits, with real-time data and educational facts about each planet.</p>
+<div class="flex items-center space-x-4 mb-4">
+<span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">Physics</span>
+<span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">JavaScript</span>
+<span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">⭐ 4.9/5</span>
+</div>
+<p class="text-sm opacity-90">Created by Jordan T. • Grade 11</p>
+</div>
+<div class="text-center">
+<div class="bg-white bg-opacity-20 rounded-xl p-6">
+<div class="text-6xl mb-4">🪐</div>
+<button onclick="viewProject('solar-system')" class="bg-white text-study-blue px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+View Project
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Project Categories -->
+<div class="mb-8">
+<div class="flex flex-wrap justify-center gap-4">
+<button onclick="filterProjects('all')" class="filter-btn active bg-study-blue text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-600 transition-colors">All Projects</button>
+<button onclick="filterProjects('science')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">Science</button>
+<button onclick="filterProjects('math')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">Math</button>
+<button onclick="filterProjects('history')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">History</button>
+<button onclick="filterProjects('art')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">Art & Design</button>
+<button onclick="filterProjects('tech')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">Technology</button>
+</div>
+</div>
+
+<div id="projectsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="project-card bg-gray-50 rounded-2xl shadow-lg overflow-hidden card-hover" data-category="science">
+<div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+<div class="text-6xl">🧬</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold">DNA Model Project</h3>
+<div class="flex items-center text-yellow-500">
+<span class="text-sm mr-1">4.8</span>
+<div class="text-lg">⭐</div>
+</div>
+</div>
+<p class="text-gray-600 mb-4">Interactive 3D model showing DNA structure and replication process with animations.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Biology</span>
+<span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">3D Modeling</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">Sarah M. • Grade 12</span>
+<button onclick="viewProject('dna-model')" class="text-study-blue hover:text-blue-600 font-semibold">View Details</button>
+</div>
+</div>
+</div>
+
+<div class="project-card bg-gray-50 rounded-2xl shadow-lg overflow-hidden card-hover" data-category="science">
+<div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+<div class="text-6xl">📊</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold">Climate Data Analysis</h3>
+<div class="flex items-center text-yellow-500">
+<span class="text-sm mr-1">4.6</span>
+<div class="text-lg">⭐</div>
+</div>
+</div>
+<p class="text-gray-600 mb-4">Statistical analysis of local weather patterns over the past decade with predictions.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Environmental Science</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Data Analysis</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">Alex K. • Grade 11</span>
+<button onclick="viewProject('climate-data')" class="text-study-blue hover:text-blue-600 font-semibold">View Details</button>
+</div>
+</div>
+</div>
+
+<div class="project-card bg-gray-50 rounded-2xl shadow-lg overflow-hidden card-hover" data-category="history">
+<div class="h-48 bg-gradient-to-br from-yellow-400 to-red-500 flex items-center justify-center">
+<div class="text-6xl">🏛️</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold">Ancient Rome Timeline</h3>
+<div class="flex items-center text-yellow-500">
+<span class="text-sm mr-1">4.7</span>
+<div class="text-lg">⭐</div>
+</div>
+</div>
+<p class="text-gray-600 mb-4">Interactive timeline exploring major events in Roman history with multimedia content.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">History</span>
+<span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">Interactive Design</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">Maya L. • Grade 10</span>
+<button onclick="viewProject('rome-timeline')" class="text-study-blue hover:text-blue-600 font-semibold">View Details</button>
+</div>
+</div>
+</div>
+
+<div class="project-card bg-gray-50 rounded-2xl shadow-lg overflow-hidden card-hover" data-category="math">
+<div class="h-48 bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center">
+<div class="text-6xl">📐</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold">Fractal Art Generator</h3>
+<div class="flex items-center text-yellow-500">
+<span class="text-sm mr-1">4.9</span>
+<div class="text-lg">⭐</div>
+</div>
+</div>
+<p class="text-gray-600 mb-4">Mathematical art generator creating beautiful fractals using complex algorithms.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-pink-100 text-pink-800 px-2 py-1 rounded-full text-xs">Mathematics</span>
+<span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">Programming</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">Emma R. • Grade 12</span>
+<button onclick="viewProject('fractal-art')" class="text-study-blue hover:text-blue-600 font-semibold">View Details</button>
+</div>
+</div>
+</div>
+
+<div class="project-card bg-gray-50 rounded-2xl shadow-lg overflow-hidden card-hover" data-category="tech">
+<div class="h-48 bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center">
+<div class="text-6xl">🤖</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold">AI Study Assistant</h3>
+<div class="flex items-center text-yellow-500">
+<span class="text-sm mr-1">4.5</span>
+<div class="text-lg">⭐</div>
+</div>
+</div>
+<p class="text-gray-600 mb-4">Chatbot that helps students with homework questions and study planning.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded-full text-xs">AI/ML</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Web Development</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">David C. • Grade 11</span>
+<button onclick="viewProject('ai-assistant')" class="text-study-blue hover:text-blue-600 font-semibold">View Details</button>
+</div>
+</div>
+</div>
+
+<div class="project-card bg-gray-50 rounded-2xl shadow-lg overflow-hidden card-hover" data-category="art">
+<div class="h-48 bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center">
+<div class="text-6xl">🎨</div>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold">Digital Art Portfolio</h3>
+<div class="flex items-center text-yellow-500">
+<span class="text-sm mr-1">4.8</span>
+<div class="text-lg">⭐</div>
+</div>
+</div>
+<p class="text-gray-600 mb-4">Stunning collection of digital artwork exploring themes of nature and technology.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Digital Art</span>
+<span class="bg-pink-100 text-pink-800 px-2 py-1 rounded-full text-xs">Portfolio</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-gray-500">Zoe H. • Grade 10</span>
+<button onclick="viewProject('digital-art')" class="text-study-blue hover:text-blue-600 font-semibold">View Details</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="text-center mt-12">
+<button onclick="showSubmissionForm()" class="bg-study-yellow text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-yellow-300 transition-colors">
+Submit Your Project 📤
+</button>
+</div>
+</div>
+</section>
+
+<!-- Study Progress Tracker -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-6">
+<h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Your Study Progress 📈</h2>
+
+<div class="max-w-4xl mx-auto">
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-white rounded-2xl shadow-lg p-6">
+<h3 class="text-xl font-bold mb-4">Weekly Goals</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between mb-2">
+<span>Math Practice</span>
+<span class="font-semibold">75%</span>
+</div>
+<div class="bg-gray-200 rounded-full h-3">
+<div class="progress-bar bg-study-blue h-3 rounded-full" style="--progress-width: 75%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span>Science Reading</span>
+<span class="font-semibold">60%</span>
+</div>
+<div class="bg-gray-200 rounded-full h-3">
+<div class="progress-bar bg-green-500 h-3 rounded-full" style="--progress-width: 60%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span>Language Arts</span>
+<span class="font-semibold">90%</span>
+</div>
+<div class="bg-gray-200 rounded-full h-3">
+<div class="progress-bar bg-study-purple h-3 rounded-full" style="--progress-width: 90%;"></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg p-6">
+<h3 class="text-xl font-bold mb-4">Study Streak 🔥</h3>
+<div class="text-center">
+<div class="text-6xl font-bold text-study-yellow mb-2">7</div>
+<p class="text-gray-600 mb-4">Days in a row!</p>
+<div class="flex justify-center space-x-2">
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">M</div>
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">T</div>
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">W</div>
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">T</div>
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">F</div>
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">S</div>
+<div class="w-8 h-8 bg-study-yellow rounded-full flex items-center justify-center text-white font-bold">S</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Resources Hub -->
+<section id="resources" class="py-16 bg-white">
+<div class="container mx-auto px-6">
+<h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Study Resources Hub 📖</h2>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-blue-50 rounded-2xl p-6 text-center card-hover">
+<div class="text-4xl mb-4">🎓</div>
+<h3 class="font-bold mb-2">Khan Academy</h3>
+<p class="text-sm text-gray-600 mb-4">Free online courses and practice exercises</p>
+<a href="https://www.khanacademy.org" target="_blank" class="text-study-blue hover:text-blue-600 font-semibold">Visit Site →</a>
+</div>
+
+<div class="bg-purple-50 rounded-2xl p-6 text-center card-hover">
+<div class="text-4xl mb-4">📚</div>
+<h3 class="font-bold mb-2">Quizlet</h3>
+<p class="text-sm text-gray-600 mb-4">Flashcards and study games for any subject</p>
+<a href="https://quizlet.com" target="_blank" class="text-study-purple hover:text-purple-600 font-semibold">Visit Site →</a>
+</div>
+
+<div class="bg-green-50 rounded-2xl p-6 text-center card-hover">
+<div class="text-4xl mb-4">🧪</div>
+<h3 class="font-bold mb-2">PhET Simulations</h3>
+<p class="text-sm text-gray-600 mb-4">Interactive science and math simulations</p>
+<a href="https://phet.colorado.edu" target="_blank" class="text-green-600 hover:text-green-700 font-semibold">Visit Site →</a>
+</div>
+
+<div class="bg-yellow-50 rounded-2xl p-6 text-center card-hover">
+<div class="text-4xl mb-4">📝</div>
+<h3 class="font-bold mb-2">Study Templates</h3>
+<p class="text-sm text-gray-600 mb-4">Downloadable study schedules and note sheets</p>
+<button onclick="showTemplates()" class="text-study-yellow hover:text-yellow-600 font-semibold">Download →</button>
+</div>
+</div>
+
+<!-- Featured TED-Ed Video -->
+<div class="mt-12 max-w-4xl mx-auto">
+<h3 class="text-2xl font-bold text-center mb-6">💡 Inspiration Corner</h3>
+<div class="bg-gray-100 rounded-2xl p-8 text-center">
+<h4 class="text-xl font-semibold mb-4">Featured: "How to Study Smarter, Not Harder"</h4>
+<p class="text-gray-600 mb-6">Discover evidence-based study techniques that actually work!</p>
+<div class="bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg p-6 inline-block">
+<div class="text-6xl mb-4">▶️</div>
+<p class="font-semibold">Watch on TED-Ed</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Contact & Collaboration -->
+<section id="contact" class="py-16 bg-gray-50">
+<div class="container mx-auto px-6">
+<h2 class="text-4xl font-bold text-center mb-12 text-gray-800">Join Our Study Community 🤝</h2>
+
+<div class="max-w-2xl mx-auto">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h3 class="text-2xl font-bold mb-6 text-center">Submit Your Study Hack & Get Featured!</h3>
+<form id="collaborationForm" class="space-y-6">
+<div>
+<label class="block text-sm font-semibold mb-2">Your Name</label>
+<input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="Enter your name" required>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Email</label>
+<input type="email" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="your.email@example.com" required>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Subject</label>
+<select class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" required>
+<option value="">Choose a topic...</option>
+<option value="study-tip">Study Tip</option>
+<option value="project-idea">Project Idea</option>
+<option value="resource-suggestion">Resource Suggestion</option>
+<option value="collaboration">Collaboration Request</option>
+<option value="feedback">General Feedback</option>
+</select>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Your Message</label>
+<textarea rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="Share your study hack, project idea, or feedback..." required></textarea>
+</div>
+
+<div class="text-center">
+<button type="submit" class="bg-study-blue text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-600 transition-colors">
+Submit & Get Featured! 🌟
+</button>
+</div>
+</form>
+
+<div class="mt-8 p-4 bg-blue-50 rounded-lg">
+<p class="text-sm text-gray-600 text-center">
+<strong>Note:</strong> This is a demo form. In a real implementation, this would connect to a service like Formspree to handle submissions.
+</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-bg text-white py-12">
+<div class="container mx-auto px-6">
+<div class="text-center">
+<div class="flex items-center justify-center space-x-2 mb-4">
+<div class="text-3xl">🎮</div>
+<h3 class="text-2xl font-bold">StudyPlay Hub</h3>
+</div>
+<p class="text-lg mb-6">Making learning fun, one game at a time!</p>
+<div class="flex justify-center space-x-6 mb-6">
+<a href="#home" class="hover:text-study-yellow transition-colors">Home</a>
+<a href="#games" class="hover:text-study-yellow transition-colors">Games</a>
+<a href="#projects" class="hover:text-study-yellow transition-colors">Projects</a>
+<a href="#resources" class="hover:text-study-yellow transition-colors">Resources</a>
+<a href="#contact" class="hover:text-study-yellow transition-colors">Contact</a>
+</div>
+<p class="text-sm opacity-75">© 2024 StudyPlay Hub. Built with ❤️ for students everywhere.</p>
+</div>
+</div>
+</footer>
+
+<script>
+// Mobile menu toggle
+document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+const mobileMenu = document.getElementById('mobileMenu');
+mobileMenu.classList.toggle('hidden');
+});
+
+// Smooth scrolling
+function scrollToSection(sectionId) {
+document.getElementById(sectionId).scrollIntoView({
+behavior: 'smooth'
+});
+}
+
+// Quiz functionality
+let currentQuestion = 0;
+let score = 0;
+let quizQuestions = [
+{
+question: "What is 15 × 8?",
+options: ["A) 110", "B) 120", "C) 130", "D) 125"],
+correct: 1
+},
+{
+question: "What is the square root of 144?",
+options: ["A) 11", "B) 12", "C) 13", "D) 14"],
+correct: 1
+},
+{
+question: "What is 25% of 80?",
+options: ["A) 15", "B) 20", "C) 25", "D) 30"],
+correct: 1
+}
+];
+
+function selectAnswer(button, isCorrect) {
+const options = document.querySelectorAll('.quiz-option');
+options.forEach(option => {
+option.disabled = true;
+if (option === button) {
+if (isCorrect) {
+option.classList.add('correct');
+score++;
+} else {
+option.classList.add('incorrect');
+}
+}
+});
+
+const feedback = document.getElementById('quizFeedback');
+feedback.classList.remove('hidden');
+if (isCorrect) {
+feedback.className = 'mb-4 p-4 rounded-lg bg-green-100 text-green-800';
+feedback.textContent = '🎉 Correct! Great job!';
+} else {
+feedback.className = 'mb-4 p-4 rounded-lg bg-red-100 text-red-800';
+feedback.textContent = '❌ Not quite right. The correct answer is highlighted in green.';
+// Show correct answer
+options[quizQuestions[currentQuestion].correct].classList.add('correct');
+}
+
+document.getElementById('nextQuestion').classList.remove('hidden');
+}
+
+function nextQuestion() {
+currentQuestion++;
+if (currentQuestion < quizQuestions.length) {
+loadQuestion();
+} else {
+showQuizComplete();
+}
+}
+
+function loadQuestion() {
+const question = quizQuestions[currentQuestion];
+document.getElementById('questionNumber').textContent = currentQuestion + 1;
+document.getElementById('questionText').textContent = question.question;
+
+const options = document.querySelectorAll('.quiz-option');
+options.forEach((option, index) => {
+option.textContent = question.options[index];
+option.className = 'quiz-option border-2 border-gray-300 rounded-lg p-4 text-left';
+option.disabled = false;
+option.onclick = () => selectAnswer(option, index === question.correct);
+});
+
+document.getElementById('quizFeedback').classList.add('hidden');
+document.getElementById('nextQuestion').classList.add('hidden');
+}
+
+function showQuizComplete() {
+document.getElementById('mathQuiz').classList.add('hidden');
+document.getElementById('quizComplete').classList.remove('hidden');
+document.getElementById('finalScore').textContent = `${score}/${quizQuestions.length}`;
+}
+
+function restartQuiz() {
+currentQuestion = 0;
+score = 0;
+document.getElementById('mathQuiz').classList.remove('hidden');
+document.getElementById('quizComplete').classList.add('hidden');
+loadQuestion();
+}
+
+// Math Puzzle Game
+let mathPuzzles = [
+{ problem: "If a train travels 60 mph for 2.5 hours, how far does it go?", answer: "150", unit: "miles" },
+{ problem: "What is 7² + 3² ?", answer: "58", unit: "" },
+{ problem: "If you buy 3 items at $4.50 each, what's the total?", answer: "13.50", unit: "dollars" },
+{ problem: "What is 144 ÷ 12?", answer: "12", unit: "" },
+{ problem: "If a rectangle is 8cm by 5cm, what's its area?", answer: "40", unit: "cm²" }
+];
+let currentMathPuzzle = 0;
+let mathScore = 0;
+
+function showMathPuzzle() {
+currentMathPuzzle = 0;
+mathScore = 0;
+const gameHtml = `
+<div id="mathPuzzleGame" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-study-blue">🧮 Math Puzzle Challenge</h3>
+<button onclick="closeMathPuzzle()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+<div id="mathPuzzleContent">
+<div class="text-center mb-4">
+<span class="text-lg font-semibold">Problem <span id="mathPuzzleNumber">1</span> of ${mathPuzzles.length}</span>
+</div>
+<div class="bg-blue-50 rounded-lg p-6 mb-6">
+<p id="mathProblem" class="text-lg font-semibold text-center mb-4">${mathPuzzles[0].problem}</p>
+<div class="flex justify-center">
+<input type="text" id="mathAnswer" class="border-2 border-gray-300 rounded-lg px-4 py-2 text-center text-lg" placeholder="Your answer">
+</div>
+</div>
+<div id="mathFeedback" class="hidden mb-4 p-4 rounded-lg text-center"></div>
+<div class="text-center">
+<button id="submitMathAnswer" onclick="checkMathAnswer()" class="bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">Submit Answer</button>
+<button id="nextMathPuzzle" onclick="nextMathPuzzle()" class="hidden bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors ml-4">Next Problem</button>
+</div>
+<div id="mathPuzzleComplete" class="hidden text-center">
+<h4 class="text-2xl font-bold text-green-600 mb-4">Puzzle Complete! 🎉</h4>
+<p class="text-lg mb-4">Your Score: <span id="mathFinalScore" class="font-bold text-study-blue"></span></p>
+<button onclick="restartMathPuzzle()" class="bg-study-yellow text-gray-800 px-6 py-2 rounded-lg hover:bg-yellow-300 transition-colors">Try Again</button>
+</div>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', gameHtml);
+}
+
+function checkMathAnswer() {
+const userAnswer = document.getElementById('mathAnswer').value.trim();
+const correctAnswer = mathPuzzles[currentMathPuzzle].answer;
+const feedback = document.getElementById('mathFeedback');
+
+feedback.classList.remove('hidden');
+if (userAnswer === correctAnswer) {
+feedback.className = 'mb-4 p-4 rounded-lg bg-green-100 text-green-800 text-center';
+feedback.textContent = '🎉 Correct! Excellent work!';
+mathScore++;
+} else {
+feedback.className = 'mb-4 p-4 rounded-lg bg-red-100 text-red-800 text-center';
+feedback.textContent = `❌ Not quite. The correct answer is ${correctAnswer}${mathPuzzles[currentMathPuzzle].unit ? ' ' + mathPuzzles[currentMathPuzzle].unit : ''}`;
+}
+
+document.getElementById('submitMathAnswer').classList.add('hidden');
+document.getElementById('nextMathPuzzle').classList.remove('hidden');
+}
+
+function nextMathPuzzle() {
+currentMathPuzzle++;
+if (currentMathPuzzle < mathPuzzles.length) {
+loadMathPuzzle();
+} else {
+showMathPuzzleComplete();
+}
+}
+
+function loadMathPuzzle() {
+document.getElementById('mathPuzzleNumber').textContent = currentMathPuzzle + 1;
+document.getElementById('mathProblem').textContent = mathPuzzles[currentMathPuzzle].problem;
+document.getElementById('mathAnswer').value = '';
+document.getElementById('mathFeedback').classList.add('hidden');
+document.getElementById('submitMathAnswer').classList.remove('hidden');
+document.getElementById('nextMathPuzzle').classList.add('hidden');
+}
+
+function showMathPuzzleComplete() {
+document.getElementById('mathPuzzleContent').innerHTML = `
+<div class="text-center">
+<h4 class="text-2xl font-bold text-green-600 mb-4">All Puzzles Complete! 🎉</h4>
+<p class="text-lg mb-4">Your Score: <span class="font-bold text-study-blue">${mathScore}/${mathPuzzles.length}</span></p>
+<button onclick="restartMathPuzzle()" class="bg-study-yellow text-gray-800 px-6 py-2 rounded-lg hover:bg-yellow-300 transition-colors mr-4">Try Again</button>
+<button onclick="closeMathPuzzle()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors">Close</button>
+</div>
+`;
+}
+
+function restartMathPuzzle() {
+currentMathPuzzle = 0;
+mathScore = 0;
+document.getElementById('mathPuzzleContent').innerHTML = `
+<div class="text-center mb-4">
+<span class="text-lg font-semibold">Problem <span id="mathPuzzleNumber">1</span> of ${mathPuzzles.length}</span>
+</div>
+<div class="bg-blue-50 rounded-lg p-6 mb-6">
+<p id="mathProblem" class="text-lg font-semibold text-center mb-4">${mathPuzzles[0].problem}</p>
+<div class="flex justify-center">
+<input type="text" id="mathAnswer" class="border-2 border-gray-300 rounded-lg px-4 py-2 text-center text-lg" placeholder="Your answer">
+</div>
+</div>
+<div id="mathFeedback" class="hidden mb-4 p-4 rounded-lg text-center"></div>
+<div class="text-center">
+<button id="submitMathAnswer" onclick="checkMathAnswer()" class="bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">Submit Answer</button>
+<button id="nextMathPuzzle" onclick="nextMathPuzzle()" class="hidden bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors ml-4">Next Problem</button>
+</div>
+`;
+}
+
+function closeMathPuzzle() {
+document.getElementById('mathPuzzleGame').remove();
+}
+
+// Vocabulary Builder Game
+let vocabWords = [
+{ word: "Eloquent", definition: "Fluent and persuasive in speaking or writing", options: ["Fluent and persuasive", "Quiet and shy", "Loud and boisterous", "Confused and unclear"], correct: 0 },
+{ word: "Meticulous", definition: "Showing great attention to detail; very careful", options: ["Careless", "Very careful and detailed", "Fast and efficient", "Lazy"], correct: 1 },
+{ word: "Ubiquitous", definition: "Present, appearing, or found everywhere", options: ["Rare", "Found everywhere", "Hidden", "Expensive"], correct: 1 },
+{ word: "Ephemeral", definition: "Lasting for a very short time", options: ["Permanent", "Very short-lived", "Extremely long", "Medium duration"], correct: 1 },
+{ word: "Serendipity", definition: "The occurrence of events by chance in a happy way", options: ["Bad luck", "Hard work", "Happy accident", "Careful planning"], correct: 2 }
+];
+let currentVocabWord = 0;
+let vocabScore = 0;
+
+function showVocabGame() {
+currentVocabWord = 0;
+vocabScore = 0;
+const gameHtml = `
+<div id="vocabGame" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-study-purple">📚 Vocabulary Builder</h3>
+<button onclick="closeVocabGame()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+<div id="vocabContent">
+<div class="text-center mb-4">
+<span class="text-lg font-semibold">Word <span id="vocabWordNumber">1</span> of ${vocabWords.length}</span>
+</div>
+<div class="bg-purple-50 rounded-lg p-6 mb-6 text-center">
+<h4 id="vocabWord" class="text-3xl font-bold text-study-purple mb-4">${vocabWords[0].word}</h4>
+<p class="text-lg mb-4">What does this word mean?</p>
+<div id="vocabOptions" class="grid grid-cols-1 gap-3">
+${vocabWords[0].options.map((option, index) =>
+`<button class="vocab-option border-2 border-gray-300 rounded-lg p-3 text-left hover:bg-purple-50 hover:border-purple-300 transition-colors" onclick="selectVocabAnswer(this, ${index === vocabWords[0].correct})">${option}</button>`
+).join('')}
+</div>
+</div>
+<div id="vocabFeedback" class="hidden mb-4 p-4 rounded-lg text-center"></div>
+<div class="text-center">
+<button id="nextVocabWord" onclick="nextVocabWord()" class="hidden bg-study-purple text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors">Next Word</button>
+</div>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', gameHtml);
+}
+
+function selectVocabAnswer(button, isCorrect) {
+const options = document.querySelectorAll('.vocab-option');
+options.forEach(option => {
+option.disabled = true;
+if (option === button) {
+if (isCorrect) {
+option.classList.add('bg-green-100', 'border-green-500');
+vocabScore++;
+} else {
+option.classList.add('bg-red-100', 'border-red-500');
+}
+}
+});
+
+// Show correct answer
+if (!isCorrect) {
+options[vocabWords[currentVocabWord].correct].classList.add('bg-green-100', 'border-green-500');
+}
+
+const feedback = document.getElementById('vocabFeedback');
+feedback.classList.remove('hidden');
+if (isCorrect) {
+feedback.className = 'mb-4 p-4 rounded-lg bg-green-100 text-green-800 text-center';
+feedback.innerHTML = `🎉 Correct!<br><strong>Definition:</strong> ${vocabWords[currentVocabWord].definition}`;
+} else {
+feedback.className = 'mb-4 p-4 rounded-lg bg-red-100 text-red-800 text-center';
+feedback.innerHTML = `❌ Not quite right.<br><strong>Definition:</strong> ${vocabWords[currentVocabWord].definition}`;
+}
+
+document.getElementById('nextVocabWord').classList.remove('hidden');
+}
+
+function nextVocabWord() {
+currentVocabWord++;
+if (currentVocabWord < vocabWords.length) {
+loadVocabWord();
+} else {
+showVocabComplete();
+}
+}
+
+function loadVocabWord() {
+const word = vocabWords[currentVocabWord];
+document.getElementById('vocabWordNumber').textContent = currentVocabWord + 1;
+document.getElementById('vocabWord').textContent = word.word;
+
+const optionsContainer = document.getElementById('vocabOptions');
+optionsContainer.innerHTML = word.options.map((option, index) =>
+`<button class="vocab-option border-2 border-gray-300 rounded-lg p-3 text-left hover:bg-purple-50 hover:border-purple-300 transition-colors" onclick="selectVocabAnswer(this, ${index === word.correct})">${option}</button>`
+).join('');
+
+document.getElementById('vocabFeedback').classList.add('hidden');
+document.getElementById('nextVocabWord').classList.add('hidden');
+}
+
+function showVocabComplete() {
+document.getElementById('vocabContent').innerHTML = `
+<div class="text-center">
+<h4 class="text-2xl font-bold text-green-600 mb-4">Vocabulary Challenge Complete! 🎉</h4>
+<p class="text-lg mb-4">Your Score: <span class="font-bold text-study-purple">${vocabScore}/${vocabWords.length}</span></p>
+<p class="text-gray-600 mb-6">Keep practicing to expand your vocabulary!</p>
+<button onclick="restartVocabGame()" class="bg-study-yellow text-gray-800 px-6 py-2 rounded-lg hover:bg-yellow-300 transition-colors mr-4">Try Again</button>
+<button onclick="closeVocabGame()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors">Close</button>
+</div>
+`;
+}
+
+function restartVocabGame() {
+closeVocabGame();
+showVocabGame();
+}
+
+function closeVocabGame() {
+document.getElementById('vocabGame').remove();
+}
+
+// Science Trivia Game
+let scienceQuestions = [
+{ question: "What is the chemical symbol for gold?", options: ["Go", "Gd", "Au", "Ag"], correct: 2, explanation: "Au comes from the Latin word 'aurum' meaning gold." },
+{ question: "How many bones are in an adult human body?", options: ["196", "206", "216", "226"], correct: 1, explanation: "An adult human has 206 bones, while babies are born with about 270 bones." },
+{ question: "What planet is known as the Red Planet?", options: ["Venus", "Jupiter", "Mars", "Saturn"], correct: 2, explanation: "Mars appears red due to iron oxide (rust) on its surface." },
+{ question: "What is the powerhouse of the cell?", options: ["Nucleus", "Mitochondria", "Ribosome", "Chloroplast"], correct: 1, explanation: "Mitochondria produce ATP, the energy currency of cells." },
+{ question: "What gas makes up about 78% of Earth's atmosphere?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], correct: 2, explanation: "Nitrogen makes up about 78% of our atmosphere, while oxygen is about 21%." }
+];
+let currentScienceQuestion = 0;
+let scienceScore = 0;
+
+function showScienceTrivia() {
+currentScienceQuestion = 0;
+scienceScore = 0;
+const gameHtml = `
+<div id="scienceGame" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-green-600">🔬 Science Trivia Challenge</h3>
+<button onclick="closeScienceGame()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+<div id="scienceContent">
+<div class="text-center mb-4">
+<span class="text-lg font-semibold">Question <span id="scienceQuestionNumber">1</span> of ${scienceQuestions.length}</span>
+</div>
+<div class="bg-green-50 rounded-lg p-6 mb-6">
+<h4 id="scienceQuestion" class="text-xl font-semibold mb-4 text-center">${scienceQuestions[0].question}</h4>
+<div id="scienceOptions" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+${scienceQuestions[0].options.map((option, index) =>
+`<button class="science-option border-2 border-gray-300 rounded-lg p-3 text-left hover:bg-green-50 hover:border-green-300 transition-colors" onclick="selectScienceAnswer(this, ${index === scienceQuestions[0].correct})">${option}</button>`
+).join('')}
+</div>
+</div>
+<div id="scienceFeedback" class="hidden mb-4 p-4 rounded-lg"></div>
+<div class="text-center">
+<button id="nextScienceQuestion" onclick="nextScienceQuestion()" class="hidden bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">Next Question</button>
+</div>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', gameHtml);
+}
+
+function selectScienceAnswer(button, isCorrect) {
+const options = document.querySelectorAll('.science-option');
+options.forEach(option => {
+option.disabled = true;
+if (option === button) {
+if (isCorrect) {
+option.classList.add('bg-green-100', 'border-green-500');
+scienceScore++;
+} else {
+option.classList.add('bg-red-100', 'border-red-500');
+}
+}
+});
+
+// Show correct answer
+if (!isCorrect) {
+options[scienceQuestions[currentScienceQuestion].correct].classList.add('bg-green-100', 'border-green-500');
+}
+
+const feedback = document.getElementById('scienceFeedback');
+feedback.classList.remove('hidden');
+if (isCorrect) {
+feedback.className = 'mb-4 p-4 rounded-lg bg-green-100 text-green-800';
+feedback.innerHTML = `🎉 Correct!<br><strong>Fun Fact:</strong> ${scienceQuestions[currentScienceQuestion].explanation}`;
+} else {
+feedback.className = 'mb-4 p-4 rounded-lg bg-red-100 text-red-800';
+feedback.innerHTML = `❌ Not quite right.<br><strong>Fun Fact:</strong> ${scienceQuestions[currentScienceQuestion].explanation}`;
+}
+
+document.getElementById('nextScienceQuestion').classList.remove('hidden');
+}
+
+function nextScienceQuestion() {
+currentScienceQuestion++;
+if (currentScienceQuestion < scienceQuestions.length) {
+loadScienceQuestion();
+} else {
+showScienceComplete();
+}
+}
+
+function loadScienceQuestion() {
+const question = scienceQuestions[currentScienceQuestion];
+document.getElementById('scienceQuestionNumber').textContent = currentScienceQuestion + 1;
+document.getElementById('scienceQuestion').textContent = question.question;
+
+const optionsContainer = document.getElementById('scienceOptions');
+optionsContainer.innerHTML = question.options.map((option, index) =>
+`<button class="science-option border-2 border-gray-300 rounded-lg p-3 text-left hover:bg-green-50 hover:border-green-300 transition-colors" onclick="selectScienceAnswer(this, ${index === question.correct})">${option}</button>`
+).join('');
+
+document.getElementById('scienceFeedback').classList.add('hidden');
+document.getElementById('nextScienceQuestion').classList.add('hidden');
+}
+
+function showScienceComplete() {
+document.getElementById('scienceContent').innerHTML = `
+<div class="text-center">
+<h4 class="text-2xl font-bold text-green-600 mb-4">Science Trivia Complete! 🎉</h4>
+<p class="text-lg mb-4">Your Score: <span class="font-bold text-green-600">${scienceScore}/${scienceQuestions.length}</span></p>
+<p class="text-gray-600 mb-6">Keep exploring the wonders of science!</p>
+<button onclick="restartScienceGame()" class="bg-study-yellow text-gray-800 px-6 py-2 rounded-lg hover:bg-yellow-300 transition-colors mr-4">Try Again</button>
+<button onclick="closeScienceGame()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors">Close</button>
+</div>
+`;
+}
+
+function restartScienceGame() {
+closeScienceGame();
+showScienceTrivia();
+}
+
+function closeScienceGame() {
+document.getElementById('scienceGame').remove();
+}
+
+// Flashcard Creator functionality
+let userFlashcards = [];
+let currentFlashcard = 0;
+let isShowingAnswer = false;
+
+function showFlashcardCreator() {
+const creatorHtml = `
+<div id="flashcardCreator" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-study-yellow">🃏 Create Your Flashcards</h3>
+<button onclick="closeFlashcardCreator()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+
+<div id="flashcardCreatorContent">
+<div class="grid md:grid-cols-2 gap-8">
+<div>
+<h4 class="text-xl font-bold mb-4">Create New Flashcard</h4>
+<form id="flashcardForm" class="space-y-4">
+<div>
+<label class="block text-sm font-semibold mb-2">Subject/Category</label>
+<input type="text" id="flashcardSubject" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-yellow" placeholder="e.g., Biology, History, Spanish..." required>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Question/Front Side</label>
+<textarea id="flashcardQuestion" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-yellow" placeholder="Enter your question or term..." required></textarea>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Answer/Back Side</label>
+<textarea id="flashcardAnswer" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-yellow" placeholder="Enter the answer or definition..." required></textarea>
+</div>
+
+<button type="submit" class="w-full bg-study-yellow text-gray-800 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+Add Flashcard 📝
+</button>
+</form>
+</div>
+
+<div>
+<div class="flex justify-between items-center mb-4">
+<h4 class="text-xl font-bold">Your Flashcards (<span id="flashcardCount">0</span>)</h4>
+<button id="studyFlashcardsBtn" onclick="startFlashcardStudy()" class="bg-study-blue text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+Study Cards 🎯
+</button>
+</div>
+
+<div id="flashcardList" class="space-y-3 max-h-64 overflow-y-auto">
+<div class="text-center text-gray-500 py-8">
+<div class="text-4xl mb-2">📚</div>
+<p>No flashcards yet. Create your first one!</p>
+</div>
+</div>
+
+<div class="mt-4 flex gap-2">
+<button id="clearFlashcardsBtn" class="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+Clear All 🗑️
+</button>
+<button id="exportFlashcardsBtn" class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+Export 📤
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', creatorHtml);
+
+// Add form submission handler
+document.getElementById('flashcardForm').addEventListener('submit', addFlashcard);
+
+// Add button event listeners
+const clearBtn = document.getElementById('clearFlashcardsBtn');
+const exportBtn = document.getElementById('exportFlashcardsBtn');
+
+if (clearBtn) {
+clearBtn.removeEventListener('click', clearAllFlashcards);
+clearBtn.addEventListener('click', clearAllFlashcards);
+}
+
+if (exportBtn) {
+exportBtn.removeEventListener('click', exportFlashcards);
+exportBtn.addEventListener('click', exportFlashcards);
+}
+
+updateFlashcardDisplay();
+}
+
+function addFlashcard(event) {
+event.preventDefault();
+
+const subject = document.getElementById('flashcardSubject').value.trim();
+const question = document.getElementById('flashcardQuestion').value.trim();
+const answer = document.getElementById('flashcardAnswer').value.trim();
+
+if (subject && question && answer) {
+const flashcard = {
+id: Date.now(),
+subject: subject,
+question: question,
+answer: answer,
+created: new Date().toLocaleDateString()
+};
+
+userFlashcards.push(flashcard);
+
+// Clear form
+document.getElementById('flashcardForm').reset();
+
+// Update display
+updateFlashcardDisplay();
+
+// Show success message
+showFlashcardSuccess();
+}
+}
+
+function updateFlashcardDisplay() {
+const count = document.getElementById('flashcardCount');
+const list = document.getElementById('flashcardList');
+const studyBtn = document.getElementById('studyFlashcardsBtn');
+const clearBtn = document.getElementById('clearFlashcardsBtn');
+const exportBtn = document.getElementById('exportFlashcardsBtn');
+
+if (count) count.textContent = userFlashcards.length;
+
+if (userFlashcards.length === 0) {
+if (list) {
+list.innerHTML = `
+<div class="text-center text-gray-500 py-8">
+<div class="text-4xl mb-2">📚</div>
+<p>No flashcards yet. Create your first one!</p>
+</div>
+`;
+}
+if (studyBtn) {
+studyBtn.disabled = true;
+studyBtn.className = 'bg-gray-300 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed';
+}
+if (clearBtn) {
+clearBtn.disabled = true;
+clearBtn.className = 'flex-1 bg-gray-300 text-gray-500 py-2 rounded-lg cursor-not-allowed';
+}
+if (exportBtn) {
+exportBtn.disabled = true;
+exportBtn.className = 'flex-1 bg-gray-300 text-gray-500 py-2 rounded-lg cursor-not-allowed';
+}
+} else {
+if (list) {
+list.innerHTML = userFlashcards.map(card => `
+<div class="bg-gray-50 rounded-lg p-4 border-l-4 border-study-yellow">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs bg-study-yellow bg-opacity-20 text-gray-700 px-2 py-1 rounded-full">${card.subject}</span>
+<button onclick="deleteFlashcard(${card.id})" class="text-red-500 hover:text-red-700 text-sm">✕</button>
+</div>
+<div class="text-sm font-semibold mb-1">${card.question}</div>
+<div class="text-xs text-gray-600">${card.answer.substring(0, 50)}${card.answer.length > 50 ? '...' : ''}</div>
+</div>
+`).join('');
+}
+if (studyBtn) {
+studyBtn.disabled = false;
+studyBtn.className = 'bg-study-blue text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors';
+}
+if (clearBtn) {
+clearBtn.disabled = false;
+clearBtn.className = 'flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors';
+}
+if (exportBtn) {
+exportBtn.disabled = false;
+exportBtn.className = 'flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors';
+}
+}
+}
+
+function deleteFlashcard(id) {
+userFlashcards = userFlashcards.filter(card => card.id !== id);
+updateFlashcardDisplay();
+}
+
+function clearAllFlashcards() {
+if (confirm('Are you sure you want to delete all flashcards? This cannot be undone.')) {
+userFlashcards = [];
+updateFlashcardDisplay();
+}
+}
+
+function exportFlashcards() {
+// Create a readable text format for the flashcards
+let exportText = `MY FLASHCARDS EXPORT\n`;
+exportText += `===================\n\n`;
+exportText += `Exported on: ${new Date().toLocaleDateString()}\n`;
+exportText += `Total flashcards: ${userFlashcards.length}\n\n`;
+
+userFlashcards.forEach((card, index) => {
+exportText += `FLASHCARD ${index + 1}\n`;
+exportText += `Subject: ${card.subject}\n`;
+exportText += `Question: ${card.question}\n`;
+exportText += `Answer: ${card.answer}\n`;
+exportText += `Created: ${card.created}\n`;
+exportText += `${'='.repeat(50)}\n\n`;
+});
+
+const dataBlob = new Blob([exportText], {type: 'text/plain'});
+const url = URL.createObjectURL(dataBlob);
+
+const link = document.createElement('a');
+link.href = url;
+link.download = 'My_Flashcards_Export.txt';
+link.click();
+
+URL.revokeObjectURL(url);
+
+// Show success message
+showFlashcardExportSuccess();
+}
+
+function showFlashcardExportSuccess() {
+const successHtml = `
+<div id="exportSuccess" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-3xl p-10 max-w-2xl w-full mx-4 text-center shadow-2xl transform animate-bounce">
+<div class="text-8xl mb-6">📤✨</div>
+<h3 class="text-4xl font-bold text-green-600 mb-6">Your Flashcards Are Exported!</h3>
+
+<div class="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300 rounded-2xl p-8 mb-8">
+<div class="text-2xl font-bold text-gray-800 mb-6">📁 Find Your File Here:</div>
+<div class="space-y-4">
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex items-center justify-center text-gray-700 text-lg">
+<span class="text-3xl mr-4">💻</span>
+<div class="text-left">
+<strong>Windows:</strong><br>
+<span class="text-blue-600 font-mono">This PC → Downloads folder</span>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex items-center justify-center text-gray-700 text-lg">
+<span class="text-3xl mr-4">🍎</span>
+<div class="text-left">
+<strong>Mac:</strong><br>
+<span class="text-blue-600 font-mono">Finder → Downloads folder</span>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex items-center justify-center text-gray-700 text-lg">
+<span class="text-3xl mr-4">📱</span>
+<div class="text-left">
+<strong>Phone/Tablet:</strong><br>
+<span class="text-blue-600 font-mono">Files app → Downloads</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-blue-100 border-2 border-blue-300 rounded-2xl p-6 mb-8">
+<div class="text-lg text-gray-700">
+<div class="text-xl font-bold mb-3">📄 Your File Details:</div>
+<div class="bg-white rounded-lg p-4 mb-4">
+<strong>File name:</strong> <span class="text-blue-600 font-mono text-lg">My_Flashcards_Export.txt</span>
+</div>
+<div class="text-base">
+<strong>💡 How to use:</strong> Open with any text editor (Notepad, TextEdit, Google Docs) or print it out for offline study!
+</div>
+</div>
+</div>
+
+<button onclick="closeFlashcardExportSuccess()" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-12 py-4 rounded-2xl text-xl font-bold hover:from-green-600 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg">
+Perfect! I Found It! 🎉
+</button>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', successHtml);
+}
+
+function closeFlashcardExportSuccess() {
+const modal = document.getElementById('exportSuccess');
+if (modal) modal.remove();
+}
+
+function showFlashcardSuccess() {
+const successHtml = `
+<div id="flashcardSuccess" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform">
+<div class="flex items-center">
+<span class="mr-2">✅</span>
+<span>Flashcard added successfully!</span>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', successHtml);
+
+const successEl = document.getElementById('flashcardSuccess');
+setTimeout(() => successEl.classList.remove('translate-x-full'), 100);
+setTimeout(() => {
+successEl.classList.add('translate-x-full');
+setTimeout(() => successEl.remove(), 300);
+}, 2000);
+}
+
+function startFlashcardStudy() {
+if (userFlashcards.length === 0) return;
+
+currentFlashcard = 0;
+isShowingAnswer = false;
+
+const studyHtml = `
+<div id="flashcardStudy" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-study-blue">🎯 Study Session</h3>
+<button onclick="closeFlashcardStudy()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+
+<div class="text-center mb-6">
+<div class="text-sm text-gray-600 mb-2">Card <span id="currentCardNumber">1</span> of ${userFlashcards.length}</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+<div id="studyProgress" class="bg-study-blue h-2 rounded-full transition-all" style="width: ${(1/userFlashcards.length)*100}%"></div>
+</div>
+</div>
+
+<div id="flashcardDisplay" class="mb-8">
+<div class="bg-gradient-to-br from-study-yellow to-yellow-300 rounded-2xl p-8 min-h-64 flex items-center justify-center cursor-pointer shadow-lg transform transition-transform hover:scale-105" onclick="flipFlashcard()">
+<div class="text-center">
+<div class="text-xs bg-white bg-opacity-30 px-3 py-1 rounded-full mb-4 inline-block">${userFlashcards[0].subject}</div>
+<div id="cardContent" class="text-xl font-semibold text-gray-800">${userFlashcards[0].question}</div>
+<div class="text-sm text-gray-600 mt-4 opacity-75">Click to reveal answer</div>
+</div>
+</div>
+</div>
+
+<div class="flex justify-between items-center">
+<button id="prevCardBtn" onclick="previousCard()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+← Previous
+</button>
+
+<div class="flex gap-2">
+<button onclick="shuffleCards()" class="bg-study-purple text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+🔀 Shuffle
+</button>
+<button onclick="resetStudySession()" class="bg-study-yellow text-gray-800 px-4 py-2 rounded-lg hover:bg-yellow-300 transition-colors">
+🔄 Restart
+</button>
+</div>
+
+<button id="nextCardBtn" onclick="nextCard()" class="bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+Next →
+</button>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', studyHtml);
+}
+
+function flipFlashcard() {
+const cardContent = document.getElementById('cardContent');
+const card = document.getElementById('flashcardDisplay').firstElementChild;
+
+if (!isShowingAnswer) {
+// Show answer
+card.classList.remove('from-study-yellow', 'to-yellow-300');
+card.classList.add('from-study-blue', 'to-blue-300');
+cardContent.innerHTML = userFlashcards[currentFlashcard].answer;
+card.querySelector('.text-sm').textContent = 'Click to show question';
+isShowingAnswer = true;
+} else {
+// Show question
+card.classList.remove('from-study-blue', 'to-blue-300');
+card.classList.add('from-study-yellow', 'to-yellow-300');
+cardContent.innerHTML = userFlashcards[currentFlashcard].question;
+card.querySelector('.text-sm').textContent = 'Click to reveal answer';
+isShowingAnswer = false;
+}
+}
+
+function nextCard() {
+if (currentFlashcard < userFlashcards.length - 1) {
+currentFlashcard++;
+updateStudyCard();
+}
+}
+
+function previousCard() {
+if (currentFlashcard > 0) {
+currentFlashcard--;
+updateStudyCard();
+}
+}
+
+function updateStudyCard() {
+const cardNumber = document.getElementById('currentCardNumber');
+const progress = document.getElementById('studyProgress');
+const cardContent = document.getElementById('cardContent');
+const card = document.getElementById('flashcardDisplay').firstElementChild;
+const prevBtn = document.getElementById('prevCardBtn');
+const nextBtn = document.getElementById('nextCardBtn');
+
+// Update card number and progress
+cardNumber.textContent = currentFlashcard + 1;
+progress.style.width = `${((currentFlashcard + 1) / userFlashcards.length) * 100}%`;
+
+// Reset to question side
+isShowingAnswer = false;
+card.classList.remove('from-study-blue', 'to-blue-300');
+card.classList.add('from-study-yellow', 'to-yellow-300');
+cardContent.innerHTML = userFlashcards[currentFlashcard].question;
+card.querySelector('.text-sm').textContent = 'Click to reveal answer';
+card.querySelector('.text-xs').textContent = userFlashcards[currentFlashcard].subject;
+
+// Update button states
+prevBtn.disabled = currentFlashcard === 0;
+nextBtn.disabled = currentFlashcard === userFlashcards.length - 1;
+}
+
+function shuffleCards() {
+for (let i = userFlashcards.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[userFlashcards[i], userFlashcards[j]] = [userFlashcards[j], userFlashcards[i]];
+}
+currentFlashcard = 0;
+updateStudyCard();
+}
+
+function resetStudySession() {
+currentFlashcard = 0;
+updateStudyCard();
+}
+
+function closeFlashcardCreator() {
+const modal = document.getElementById('flashcardCreator');
+if (modal) modal.remove();
+}
+
+function closeFlashcardStudy() {
+const modal = document.getElementById('flashcardStudy');
+if (modal) modal.remove();
+}
+
+// Project showcase functionality
+function filterProjects(category) {
+const projectCards = document.querySelectorAll('.project-card');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+// Update button states
+filterBtns.forEach(btn => {
+btn.classList.remove('active', 'bg-study-blue', 'text-white');
+btn.classList.add('bg-gray-200', 'text-gray-700');
+});
+
+event.target.classList.remove('bg-gray-200', 'text-gray-700');
+event.target.classList.add('active', 'bg-study-blue', 'text-white');
+
+// Filter projects
+projectCards.forEach(card => {
+if (category === 'all' || card.dataset.category === category) {
+card.style.display = 'block';
+} else {
+card.style.display = 'none';
+}
+});
+}
+
+function viewProject(projectId) {
+const projectDetails = {
+'solar-system': {
+title: 'Solar System Simulator',
+author: 'Jordan T. • Grade 11',
+description: 'An interactive web-based simulation showing planetary orbits with real-time data and educational facts about each planet. Features include zoom controls, speed adjustment, and detailed planet information cards.',
+technologies: ['JavaScript', 'HTML5 Canvas', 'CSS3', 'Physics Calculations'],
+features: ['Real-time orbital mechanics', 'Interactive planet selection', 'Educational fact cards', 'Zoom and pan controls', 'Speed adjustment slider'],
+rating: '4.9/5',
+category: 'Physics & Astronomy'
+},
+'dna-model': {
+title: 'DNA Model Project',
+author: 'Sarah M. • Grade 12',
+description: 'Interactive 3D model showing DNA structure and replication process with detailed animations. Students can explore the double helix structure, base pairing, and watch DNA replication in real-time.',
+technologies: ['Three.js', 'WebGL', 'JavaScript', 'CSS3 Animations'],
+features: ['3D DNA visualization', 'Base pair highlighting', 'Replication animation', 'Interactive rotation', 'Educational annotations'],
+rating: '4.8/5',
+category: 'Biology'
+},
+'climate-data': {
+title: 'Climate Data Analysis',
+author: 'Alex K. • Grade 11',
+description: 'Comprehensive statistical analysis of local weather patterns over the past decade with predictive modeling. Includes interactive charts, trend analysis, and climate change impact assessments.',
+technologies: ['Python', 'Chart.js', 'Data Analysis', 'Statistical Modeling'],
+features: ['Interactive data visualization', 'Trend analysis', 'Predictive modeling', 'Climate impact assessment', 'Downloadable reports'],
+rating: '4.6/5',
+category: 'Environmental Science'
+},
+'rome-timeline': {
+title: 'Ancient Rome Timeline',
+author: 'Maya L. • Grade 10',
+description: 'Interactive timeline exploring major events in Roman history with multimedia content. Features detailed event descriptions, historical images, and connections between events.',
+technologies: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design'],
+features: ['Interactive timeline navigation', 'Multimedia content', 'Event connections', 'Historical context', 'Mobile-friendly design'],
+rating: '4.7/5',
+category: 'History'
+},
+'fractal-art': {
+title: 'Fractal Art Generator',
+author: 'Emma R. • Grade 12',
+description: 'Mathematical art generator creating beautiful fractals using complex algorithms. Users can adjust parameters to create unique fractal patterns and save their creations.',
+technologies: ['JavaScript', 'HTML5 Canvas', 'Mathematical Algorithms', 'Color Theory'],
+features: ['Real-time fractal generation', 'Parameter adjustment', 'Color customization', 'Save and share functionality', 'Mathematical explanations'],
+rating: '4.9/5',
+category: 'Mathematics & Art'
+},
+'ai-assistant': {
+title: 'AI Study Assistant',
+author: 'David C. • Grade 11',
+description: 'Intelligent chatbot that helps students with homework questions and study planning. Features natural language processing and personalized study recommendations.',
+technologies: ['Machine Learning', 'Natural Language Processing', 'JavaScript', 'API Integration'],
+features: ['Homework help', 'Study planning', 'Progress tracking', 'Personalized recommendations', 'Multi-subject support'],
+rating: '4.5/5',
+category: 'Artificial Intelligence'
+},
+'digital-art': {
+title: 'Digital Art Portfolio',
+author: 'Zoe H. • Grade 10',
+description: 'Stunning collection of digital artwork exploring themes of nature and technology. Features original illustrations, digital paintings, and interactive art pieces.',
+technologies: ['Digital Art Software', 'Web Design', 'Interactive Media', 'Animation'],
+features: ['Original artwork gallery', 'Interactive pieces', 'Artist commentary', 'Process documentation', 'High-resolution downloads'],
+rating: '4.8/5',
+category: 'Digital Art & Design'
+}
+};
+
+const project = projectDetails[projectId];
+if (!project) return;
+
+const modalHtml = `
+<div id="projectModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-4xl w-full max-h-96 overflow-y-auto">
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-3xl font-bold text-gray-800 mb-2">${project.title}</h3>
+<p class="text-gray-600">${project.author}</p>
+</div>
+<button onclick="closeProjectModal()" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+</div>
+
+<div class="grid md:grid-cols-2 gap-8">
+<div>
+<div class="bg-gradient-to-br from-study-blue to-study-purple text-white rounded-xl p-6 mb-6 text-center">
+<div class="text-6xl mb-4">🏆</div>
+<div class="text-2xl font-bold mb-2">Rating: ${project.rating}</div>
+<div class="text-sm opacity-90">${project.category}</div>
+</div>
+
+<div class="mb-6">
+<h4 class="text-xl font-bold mb-3">Technologies Used</h4>
+<div class="flex flex-wrap gap-2">
+${project.technologies.map(tech =>
+`<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">${tech}</span>`
+).join('')}
+</div>
+</div>
+</div>
+
+<div>
+<div class="mb-6">
+<h4 class="text-xl font-bold mb-3">Project Description</h4>
+<p class="text-gray-600 leading-relaxed">${project.description}</p>
+</div>
+
+<div class="mb-6">
+<h4 class="text-xl font-bold mb-3">Key Features</h4>
+<ul class="space-y-2">
+${project.features.map(feature =>
+`<li class="flex items-center text-gray-600">
+<div class="w-2 h-2 bg-study-blue rounded-full mr-3"></div>
+${feature}
+</li>`
+).join('')}
+</ul>
+</div>
+</div>
+</div>
+
+<div class="border-t pt-6 mt-6">
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button onclick="viewLiveProject('${projectId}')" class="bg-study-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+View Live Project 🚀
+</button>
+<button onclick="viewSourceCode('${projectId}')" class="bg-study-yellow text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+View Source Code 📝
+</button>
+<button onclick="contactCreator('${projectId}')" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">
+Contact Creator 💬
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+`;
+
+document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function closeProjectModal() {
+const modal = document.getElementById('projectModal');
+if (modal) {
+modal.remove();
+}
+}
+
+function showSubmissionForm() {
+const formHtml = `
+<div id="submissionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto">
+<div class="p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-gray-800">Submit Your Project 📤</h3>
+<button onclick="closeSubmissionModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+
+<form class="space-y-6">
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-semibold mb-2">Project Title</label>
+<input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="Enter project title" required>
+</div>
+<div>
+<label class="block text-sm font-semibold mb-2">Category</label>
+<select class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" required>
+<option value="">Choose category...</option>
+<option value="science">Science</option>
+<option value="math">Mathematics</option>
+<option value="history">History</option>
+<option value="art">Art & Design</option>
+<option value="tech">Technology</option>
+</select>
+</div>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Project Description</label>
+<textarea rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="Describe your project, its goals, and what makes it special..." required></textarea>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Technologies Used</label>
+<input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="e.g., JavaScript, Python, HTML/CSS, etc.">
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Project URL (if available)</label>
+<input type="url" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="https://your-project-url.com">
+</div>
+
+<div class="text-center">
+<button type="submit" class="bg-study-blue text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-600 transition-colors">
+Submit Project for Review 🌟
+</button>
+</div>
+</form>
+
+<div class="mt-6 p-4 bg-blue-50 rounded-lg">
+<p class="text-sm text-gray-600 text-center">
+<strong>Note:</strong> This is a demo form. In a real implementation, projects would be reviewed by educators before being featured in the gallery.
+</p>
+</div>
+</div>
+</div>
+</div>
+`;
+
+document.body.insertAdjacentHTML('beforeend', formHtml);
+}
+
+function closeSubmissionModal() {
+const modal = document.getElementById('submissionModal');
+if (modal) {
+modal.remove();
+}
+}
+
+function viewLiveProject(projectId) {
+const projectUrls = {
+'solar-system': 'https://solar-system-simulator-demo.netlify.app',
+'dna-model': 'https://dna-3d-model-demo.netlify.app',
+'climate-data': 'https://climate-analysis-dashboard.netlify.app',
+'rome-timeline': 'https://ancient-rome-timeline.netlify.app',
+'fractal-art': 'https://fractal-art-generator.netlify.app',
+'ai-assistant': 'https://ai-study-assistant-demo.netlify.app',
+'digital-art': 'https://digital-art-portfolio.netlify.app'
+};
+
+const url = projectUrls[projectId];
+if (url) {
+const demoHtml = `
+<div id="liveProjectDemo" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-lg w-full p-8 text-center">
+<div class="text-6xl mb-4">🚀</div>
+<h3 class="text-2xl font-bold mb-4">Live Project Demo</h3>
+<p class="text-gray-600 mb-4">This project would be hosted at:</p>
+<div class="bg-gray-100 rounded-lg p-4 mb-6">
+<code class="text-study-blue font-mono text-sm break-all">${url}</code>
+</div>
+<p class="text-sm text-gray-500 mb-6">In a real school environment, students would host their projects on platforms like Netlify, GitHub Pages, or school servers.</p>
+<div class="flex flex-col sm:flex-row gap-3 justify-center">
+<button onclick="closeLiveProjectDemo()" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors">Close</button>
+<button onclick="openDemoProject('${projectId}')" class="bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">Visit Demo URL</button>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+}
+
+function openDemoProject(projectId) {
+// Close the demo modal first
+closeLiveProjectDemo();
+
+// Create a working demo based on project type
+const projectDemos = {
+'solar-system': createSolarSystemDemo,
+'dna-model': createDNAModelDemo,
+'climate-data': createClimateDataDemo,
+'rome-timeline': createRomeTimelineDemo,
+'fractal-art': createFractalArtDemo,
+'ai-assistant': createAIAssistantDemo,
+'digital-art': createDigitalArtDemo
+};
+
+const demoFunction = projectDemos[projectId];
+if (demoFunction) {
+demoFunction();
+}
+}
+
+function createSolarSystemDemo() {
+const demoHtml = `
+<div id="solarSystemDemo" class="fixed inset-0 bg-black flex items-center justify-center z-50">
+<div class="w-full h-full relative overflow-hidden">
+<button onclick="closeSolarSystemDemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">🪐 Solar System Simulator</h3>
+<p class="text-sm opacity-90">Interactive planetary motion demo</p>
+</div>
+<div class="w-full h-full flex items-center justify-center">
+<div class="relative">
+<div id="sun" class="w-16 h-16 bg-yellow-400 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-lg animate-pulse"></div>
+<div id="earth-orbit" class="w-64 h-64 border border-blue-300 border-opacity-30 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+<div id="earth" class="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-spin" style="animation: orbit 10s linear infinite;"></div>
+</div>
+<div id="mars-orbit" class="w-80 h-80 border border-red-300 border-opacity-30 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+<div id="mars" class="w-6 h-6 bg-red-500 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2" style="animation: orbit 15s linear infinite;"></div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This is a simplified demo. The full project includes all planets, moons, and detailed information.</p>
+</div>
+</div>
+<style>
+@keyframes orbit {
+from { transform: rotate(0deg) translateX(128px) rotate(0deg); }
+to { transform: rotate(360deg) translateX(128px) rotate(-360deg); }
+}
+</style>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+
+function createFractalArtDemo() {
+const demoHtml = `
+<div id="fractalDemo" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+<div class="w-full h-full relative">
+<button onclick="closeFractalDemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">📐 Fractal Art Generator</h3>
+<p class="text-sm opacity-90">Mathematical beauty in motion</p>
+</div>
+<div class="w-full h-full flex items-center justify-center">
+<canvas id="fractalCanvas" width="600" height="600" class="border border-white border-opacity-30"></canvas>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This demo shows a simple fractal pattern. The full project includes interactive controls and multiple fractal types.</p>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+
+// Draw a simple fractal
+setTimeout(() => {
+const canvas = document.getElementById('fractalCanvas');
+if (canvas) {
+const ctx = canvas.getContext('2d');
+drawSierpinskiTriangle(ctx, canvas.width, canvas.height);
+}
+}, 100);
+}
+
+function drawSierpinskiTriangle(ctx, width, height) {
+const centerX = width / 2;
+const centerY = height / 2;
+const size = 250;
+
+function drawTriangle(x, y, size, depth) {
+if (depth === 0) {
+ctx.fillStyle = `hsl(${depth * 30}, 70%, 60%)`;
+ctx.beginPath();
+ctx.moveTo(x, y - size / 2);
+ctx.lineTo(x - size / 2, y + size / 2);
+ctx.lineTo(x + size / 2, y + size / 2);
+ctx.closePath();
+ctx.fill();
+return;
+}
+
+const newSize = size / 2;
+drawTriangle(x, y - newSize / 2, newSize, depth - 1);
+drawTriangle(x - newSize / 2, y + newSize / 2, newSize, depth - 1);
+drawTriangle(x + newSize / 2, y + newSize / 2, newSize, depth - 1);
+}
+
+ctx.fillStyle = '#1a1a1a';
+ctx.fillRect(0, 0, width, height);
+
+let depth = 0;
+const maxDepth = 5;
+
+function animate() {
+ctx.fillStyle = '#1a1a1a';
+ctx.fillRect(0, 0, width, height);
+
+drawTriangle(centerX, centerY, size, depth);
+
+depth = (depth + 1) % (maxDepth + 1);
+setTimeout(animate, 1000);
+}
+
+animate();
+}
+
+function viewSourceCode(projectId) {
+const githubUrls = {
+'solar-system': 'https://github.com/student-projects/solar-system-simulator',
+'dna-model': 'https://github.com/student-projects/dna-3d-model',
+'climate-data': 'https://github.com/student-projects/climate-data-analysis',
+'rome-timeline': 'https://github.com/student-projects/rome-timeline',
+'fractal-art': 'https://github.com/student-projects/fractal-art-generator',
+'ai-assistant': 'https://github.com/student-projects/ai-study-assistant',
+'digital-art': 'https://github.com/student-projects/digital-art-portfolio'
+};
+
+const url = githubUrls[projectId];
+if (url) {
+const demoHtml = `
+<div id="sourceCodeDemo" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-md w-full p-8 text-center">
+<div class="text-6xl mb-4">📝</div>
+<h3 class="text-2xl font-bold mb-4">View Source Code</h3>
+<p class="text-gray-600 mb-6">In a real implementation, this would open the GitHub repository:<br><strong>${url}</strong></p>
+<div class="flex gap-4 justify-center">
+<button onclick="closeSourceCodeDemo()" class="bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">Got it!</button>
+<button onclick="window.open('https://github.com', '_blank'); closeSourceCodeDemo();" class="bg-study-yellow text-gray-800 px-6 py-2 rounded-lg hover:bg-yellow-300 transition-colors">Visit GitHub</button>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+}
+
+function contactCreator(projectId) {
+const creatorInfo = {
+'solar-system': { name: 'Jordan T.', email: 'jordan.t@student.edu', grade: 'Grade 11' },
+'dna-model': { name: 'Sarah M.', email: 'sarah.m@student.edu', grade: 'Grade 12' },
+'climate-data': { name: 'Alex K.', email: 'alex.k@student.edu', grade: 'Grade 11' },
+'rome-timeline': { name: 'Maya L.', email: 'maya.l@student.edu', grade: 'Grade 10' },
+'fractal-art': { name: 'Emma R.', email: 'emma.r@student.edu', grade: 'Grade 12' },
+'ai-assistant': { name: 'David C.', email: 'david.c@student.edu', grade: 'Grade 11' },
+'digital-art': { name: 'Zoe H.', email: 'zoe.h@student.edu', grade: 'Grade 10' }
+};
+
+const creator = creatorInfo[projectId];
+if (creator) {
+const contactHtml = `
+<div id="contactCreatorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-lg w-full p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-gray-800">Contact Creator 💬</h3>
+<button onclick="closeContactCreatorModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+
+<div class="text-center mb-6">
+<div class="w-20 h-20 bg-gradient-to-br from-study-blue to-study-purple rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+${creator.name.charAt(0)}
+</div>
+<h4 class="text-xl font-bold">${creator.name}</h4>
+<p class="text-gray-600">${creator.grade}</p>
+</div>
+
+<form class="space-y-4">
+<div>
+<label class="block text-sm font-semibold mb-2">Your Name</label>
+<input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="Enter your name" required>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Your Email</label>
+<input type="email" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="your.email@example.com" required>
+</div>
+
+<div>
+<label class="block text-sm font-semibold mb-2">Message</label>
+<textarea rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-study-blue" placeholder="Hi ${creator.name.split(' ')[0]}, I really enjoyed your project! I'd love to..." required></textarea>
+</div>
+
+<div class="text-center">
+<button type="submit" onclick="sendMessage(event, '${creator.email}')" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">
+Send Message 📧
+</button>
+</div>
+</form>
+
+<div class="mt-4 p-3 bg-green-50 rounded-lg">
+<p class="text-sm text-gray-600 text-center">
+<strong>Note:</strong> This is a demo. In a real implementation, messages would be sent securely through the school's communication system.
+</p>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', contactHtml);
+}
+}
+
+function closeLiveProjectDemo() {
+const modal = document.getElementById('liveProjectDemo');
+if (modal) modal.remove();
+}
+
+function closeSolarSystemDemo() {
+const modal = document.getElementById('solarSystemDemo');
+if (modal) modal.remove();
+}
+
+function closeFractalDemo() {
+const modal = document.getElementById('fractalDemo');
+if (modal) modal.remove();
+}
+
+function createDNAModelDemo() {
+const demoHtml = `
+<div id="dnaDemo" class="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center z-50">
+<div class="w-full h-full relative">
+<button onclick="closeDNADemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">🧬 DNA Model Project</h3>
+<p class="text-sm opacity-90">Interactive 3D DNA structure</p>
+</div>
+<div class="w-full h-full flex items-center justify-center">
+<div class="relative">
+<div id="dnaHelix" class="w-64 h-96 relative">
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-4 h-full bg-gradient-to-b from-blue-400 to-purple-400 rounded-full animate-pulse"></div>
+<div class="w-4 h-full bg-gradient-to-b from-purple-400 to-blue-400 rounded-full animate-pulse ml-8"></div>
+</div>
+<div class="absolute inset-0" style="animation: rotate 8s linear infinite;">
+<div class="w-full h-2 bg-red-400 absolute top-8 rounded-full"></div>
+<div class="w-full h-2 bg-green-400 absolute top-16 rounded-full"></div>
+<div class="w-full h-2 bg-yellow-400 absolute top-24 rounded-full"></div>
+<div class="w-full h-2 bg-blue-400 absolute top-32 rounded-full"></div>
+<div class="w-full h-2 bg-red-400 absolute top-40 rounded-full"></div>
+<div class="w-full h-2 bg-green-400 absolute top-48 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This demo shows DNA structure rotation. The full project includes base pair details and replication animation.</p>
+</div>
+</div>
+<style>
+@keyframes rotate {
+from { transform: rotateY(0deg); }
+to { transform: rotateY(360deg); }
+}
+</style>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+
+function closeDNADemo() {
+const modal = document.getElementById('dnaDemo');
+if (modal) modal.remove();
+}
+
+function createClimateDataDemo() {
+const demoHtml = `
+<div id="climateDemo" class="fixed inset-0 bg-gradient-to-br from-green-800 to-blue-800 flex items-center justify-center z-50">
+<div class="w-full h-full relative p-8">
+<button onclick="closeClimateDemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">📊 Climate Data Analysis</h3>
+<p class="text-sm opacity-90">Temperature trends visualization</p>
+</div>
+<div class="w-full h-full flex items-center justify-center">
+<div class="bg-white bg-opacity-90 rounded-2xl p-8 max-w-4xl w-full">
+<h4 class="text-2xl font-bold text-gray-800 mb-6 text-center">Local Temperature Trends (2014-2024)</h4>
+<div class="relative h-64 mb-6">
+<canvas id="climateChart" width="800" height="300" class="w-full h-full"></canvas>
+</div>
+<div class="grid grid-cols-3 gap-4 text-center">
+<div class="bg-red-100 p-4 rounded-lg">
+<div class="text-2xl font-bold text-red-600">+2.3°C</div>
+<div class="text-sm text-gray-600">Average Increase</div>
+</div>
+<div class="bg-blue-100 p-4 rounded-lg">
+<div class="text-2xl font-bold text-blue-600">15%</div>
+<div class="text-sm text-gray-600">Rainfall Change</div>
+</div>
+<div class="bg-green-100 p-4 rounded-lg">
+<div class="text-2xl font-bold text-green-600">87%</div>
+<div class="text-sm text-gray-600">Data Accuracy</div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This demo shows basic climate visualization. The full project includes predictive modeling and detailed analysis.</p>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+
+setTimeout(() => {
+const canvas = document.getElementById('climateChart');
+if (canvas) {
+drawClimateChart(canvas);
+}
+}, 100);
+}
+
+function drawClimateChart(canvas) {
+const ctx = canvas.getContext('2d');
+const width = canvas.width;
+const height = canvas.height;
+
+// Clear canvas
+ctx.fillStyle = '#f8f9fa';
+ctx.fillRect(0, 0, width, height);
+
+// Draw grid
+ctx.strokeStyle = '#e9ecef';
+ctx.lineWidth = 1;
+for (let i = 0; i <= 10; i++) {
+const y = (height / 10) * i;
+ctx.beginPath();
+ctx.moveTo(0, y);
+ctx.lineTo(width, y);
+ctx.stroke();
+}
+
+// Sample temperature data
+const data = [18.5, 19.2, 20.1, 20.8, 21.3, 21.9, 22.4, 22.8, 23.2, 23.6, 24.1];
+const years = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+
+// Draw temperature line
+ctx.strokeStyle = '#dc3545';
+ctx.lineWidth = 3;
+ctx.beginPath();
+
+for (let i = 0; i < data.length; i++) {
+const x = (width / (data.length - 1)) * i;
+const y = height - ((data[i] - 15) / 10) * height;
+
+if (i === 0) {
+ctx.moveTo(x, y);
+} else {
+ctx.lineTo(x, y);
+}
+
+// Draw data points
+ctx.fillStyle = '#dc3545';
+ctx.beginPath();
+ctx.arc(x, y, 4, 0, 2 * Math.PI);
+ctx.fill();
+}
+ctx.stroke();
+}
+
+function closeClimateDemo() {
+const modal = document.getElementById('climateDemo');
+if (modal) modal.remove();
+}
+
+function createRomeTimelineDemo() {
+const demoHtml = `
+<div id="romeDemo" class="fixed inset-0 bg-gradient-to-br from-yellow-800 to-red-800 flex items-center justify-center z-50">
+<div class="w-full h-full relative p-4">
+<button onclick="closeRomeDemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">🏛️ Ancient Rome Timeline</h3>
+<p class="text-sm opacity-90">Interactive historical events</p>
+</div>
+<div class="w-full h-full flex items-center justify-center overflow-y-auto">
+<div class="bg-white bg-opacity-95 rounded-2xl p-8 max-w-4xl w-full">
+<div class="relative">
+<div class="absolute left-8 top-0 bottom-0 w-1 bg-yellow-600"></div>
+<div class="space-y-8">
+<div class="flex items-center">
+<div class="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold mr-6">753</div>
+<div>
+<h4 class="text-xl font-bold">Founding of Rome</h4>
+<p class="text-gray-600">According to legend, Rome was founded by Romulus and Remus</p>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white font-bold mr-6">509</div>
+<div>
+<h4 class="text-xl font-bold">Roman Republic</h4>
+<p class="text-gray-600">End of monarchy, beginning of the Roman Republic</p>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-6">49</div>
+<div>
+<h4 class="text-xl font-bold">Caesar Crosses Rubicon</h4>
+<p class="text-gray-600">Julius Caesar begins civil war by crossing the Rubicon River</p>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-6">27</div>
+<div>
+<h4 class="text-xl font-bold">Roman Empire</h4>
+<p class="text-gray-600">Augustus becomes first Roman Emperor</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This demo shows key Roman events. The full project includes detailed multimedia content and interactive maps.</p>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+
+function closeRomeDemo() {
+const modal = document.getElementById('romeDemo');
+if (modal) modal.remove();
+}
+
+function createAIAssistantDemo() {
+const demoHtml = `
+<div id="aiDemo" class="fixed inset-0 bg-gradient-to-br from-cyan-800 to-blue-800 flex items-center justify-center z-50">
+<div class="w-full h-full relative p-4">
+<button onclick="closeAIDemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">🤖 AI Study Assistant</h3>
+<p class="text-sm opacity-90">Intelligent homework helper</p>
+</div>
+<div class="w-full h-full flex items-center justify-center">
+<div class="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-96 overflow-y-auto">
+<div class="flex items-center mb-6">
+<div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center text-white text-xl mr-4">🤖</div>
+<div>
+<h4 class="text-xl font-bold">StudyBot</h4>
+<p class="text-gray-600 text-sm">Your AI Study Assistant</p>
+</div>
+</div>
+<div class="space-y-4 mb-6">
+<div class="bg-gray-100 rounded-lg p-4">
+<p class="text-gray-800">Hi! I'm StudyBot. I can help you with homework, create study plans, and answer questions about any subject. What would you like to work on today?</p>
+</div>
+<div class="bg-blue-100 rounded-lg p-4 ml-8">
+<p class="text-gray-800">Can you help me understand photosynthesis?</p>
+</div>
+<div class="bg-gray-100 rounded-lg p-4">
+<p class="text-gray-800">Of course! Photosynthesis is how plants make food using sunlight. The basic equation is: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂. Would you like me to break this down step by step?</p>
+</div>
+</div>
+<div class="flex">
+<input type="text" placeholder="Ask me anything..." class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+<button class="bg-blue-500 text-white px-6 py-2 rounded-r-lg hover:bg-blue-600 transition-colors">Send</button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This demo shows the chat interface. The full project includes AI-powered responses and study planning features.</p>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+
+function closeAIDemo() {
+const modal = document.getElementById('aiDemo');
+if (modal) modal.remove();
+}
+
+function createDigitalArtDemo() {
+const demoHtml = `
+<div id="artDemo" class="fixed inset-0 bg-gradient-to-br from-pink-800 to-purple-800 flex items-center justify-center z-50">
+<div class="w-full h-full relative p-4">
+<button onclick="closeArtDemo()" class="absolute top-4 right-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg hover:bg-opacity-30 transition-colors z-10">Close Demo</button>
+<div class="absolute top-4 left-4 text-white z-10">
+<h3 class="text-2xl font-bold mb-2">🎨 Digital Art Portfolio</h3>
+<p class="text-sm opacity-90">Nature meets technology</p>
+</div>
+<div class="w-full h-full flex items-center justify-center">
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl">
+<div class="bg-gradient-to-br from-green-400 to-blue-500 rounded-lg h-48 flex items-center justify-center text-white text-4xl animate-pulse">🌿</div>
+<div class="bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg h-48 flex items-center justify-center text-white text-4xl animate-pulse">🦋</div>
+<div class="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg h-48 flex items-center justify-center text-white text-4xl animate-pulse">🌅</div>
+<div class="bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg h-48 flex items-center justify-center text-white text-4xl animate-pulse">🌊</div>
+<div class="bg-gradient-to-br from-red-400 to-pink-500 rounded-lg h-48 flex items-center justify-center text-white text-4xl animate-pulse">🌺</div>
+<div class="bg-gradient-to-br from-indigo-400 to-purple-500 rounded-lg h-48 flex items-center justify-center text-white text-4xl animate-pulse">🌌</div>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
+<p class="text-sm opacity-75">This demo shows the portfolio layout. The full project includes high-resolution artwork and detailed artist commentary.</p>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', demoHtml);
+}
+
+function closeArtDemo() {
+const modal = document.getElementById('artDemo');
+if (modal) modal.remove();
+}
+
+function closeSourceCodeDemo() {
+const modal = document.getElementById('sourceCodeDemo');
+if (modal) modal.remove();
+}
+
+function closeContactCreatorModal() {
+const modal = document.getElementById('contactCreatorModal');
+if (modal) modal.remove();
+}
+
+function sendMessage(event, creatorEmail) {
+event.preventDefault();
+const successHtml = `
+<div id="messageSuccess" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-md w-full p-8 text-center">
+<div class="text-6xl mb-4">✅</div>
+<h3 class="text-2xl font-bold mb-4 text-green-600">Message Sent!</h3>
+<p class="text-gray-600 mb-6">Your message has been sent to ${creatorEmail}. They'll get back to you soon!</p>
+<button onclick="closeMessageSuccess(); closeContactCreatorModal();" class="bg-study-blue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">Great!</button>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', successHtml);
+}
+
+function closeMessageSuccess() {
+const modal = document.getElementById('messageSuccess');
+if (modal) modal.remove();
+}
+
+function showTemplates() {
+const templateModal = `
+<div id="templatesModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-2xl max-w-4xl w-full max-h-96 overflow-y-auto">
+<div class="p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-gray-800">📝 Study Templates</h3>
+<button onclick="closeTemplatesModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+</div>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="bg-blue-50 rounded-lg p-6 text-center">
+<div class="text-4xl mb-4">📅</div>
+<h4 class="font-bold mb-2">Weekly Study Planner</h4>
+<p class="text-sm text-gray-600 mb-4">Organize your study schedule for the entire week</p>
+<button onclick="downloadTemplate('weekly-planner')" class="bg-study-blue text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">Download</button>
+</div>
+
+<div class="bg-green-50 rounded-lg p-6 text-center">
+<div class="text-4xl mb-4">📋</div>
+<h4 class="font-bold mb-2">Cornell Notes Template</h4>
+<p class="text-sm text-gray-600 mb-4">Effective note-taking system for lectures</p>
+<button onclick="downloadTemplate('cornell-notes')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">Download</button>
+</div>
+
+<div class="bg-purple-50 rounded-lg p-6 text-center">
+<div class="text-4xl mb-4">🎯</div>
+<h4 class="font-bold mb-2">Goal Setting Worksheet</h4>
+<p class="text-sm text-gray-600 mb-4">Set and track your academic goals</p>
+<button onclick="downloadTemplate('goal-setting')" class="bg-study-purple text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">Download</button>
+</div>
+
+<div class="bg-yellow-50 rounded-lg p-6 text-center">
+<div class="text-4xl mb-4">⏰</div>
+<h4 class="font-bold mb-2">Pomodoro Timer Sheet</h4>
+<p class="text-sm text-gray-600 mb-4">Track your focused study sessions</p>
+<button onclick="downloadTemplate('pomodoro')" class="bg-study-yellow text-gray-800 px-4 py-2 rounded-lg hover:bg-yellow-300 transition-colors">Download</button>
+</div>
+
+<div class="bg-red-50 rounded-lg p-6 text-center">
+<div class="text-4xl mb-4">📊</div>
+<h4 class="font-bold mb-2">Grade Tracker</h4>
+<p class="text-sm text-gray-600 mb-4">Monitor your academic progress</p>
+<button onclick="downloadTemplate('grade-tracker')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">Download</button>
+</div>
+
+<div class="bg-indigo-50 rounded-lg p-6 text-center">
+<div class="text-4xl mb-4">📚</div>
+<h4 class="font-bold mb-2">Reading Log</h4>
+<p class="text-sm text-gray-600 mb-4">Track books and reading progress</p>
+<button onclick="downloadTemplate('reading-log')" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors">Download</button>
+</div>
+</div>
+
+<div class="mt-8 text-center">
+<button onclick="downloadAllTemplates()" class="bg-gradient-to-r from-study-blue to-study-purple text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
+Download All Templates 📦
+</button>
+</div>
+</div>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', templateModal);
+}
+
+function closeTemplatesModal() {
+const modal = document.getElementById('templatesModal');
+if (modal) modal.remove();
+}
+
+function downloadTemplate(templateType) {
+const templates = {
+'weekly-planner': {
+name: 'Weekly Study Planner',
+content: `WEEKLY STUDY PLANNER
+===================
+
+Week of: _______________
+
+MONDAY
+------
+Morning (9-12): ________________________
+Afternoon (1-4): _______________________
+Evening (7-9): _________________________
+Priority Tasks: ________________________
+
+TUESDAY
+-------
+Morning (9-12): ________________________
+Afternoon (1-4): _______________________
+Evening (7-9): _________________________
+Priority Tasks: ________________________
+
+WEDNESDAY
+---------
+Morning (9-12): ________________________
+Afternoon (1-4): _______________________
+Evening (7-9): _________________________
+Priority Tasks: ________________________
+
+THURSDAY
+--------
+Morning (9-12): ________________________
+Afternoon (1-4): _______________________
+Evening (7-9): _________________________
+Priority Tasks: ________________________
+
+FRIDAY
+------
+Morning (9-12): ________________________
+Afternoon (1-4): _______________________
+Evening (7-9): _________________________
+Priority Tasks: ________________________
+
+WEEKEND GOALS
+-------------
+Saturday: ______________________________
+Sunday: ________________________________
+
+WEEKLY REFLECTION
+-----------------
+What went well: ________________________
+What to improve: _______________________
+Next week's focus: _____________________`
+},
+'cornell-notes': {
+name: 'Cornell Notes Template',
+content: `CORNELL NOTES TEMPLATE
+=====================
+
+Date: _______________ Subject: _______________ Topic: _______________
+
+CUE COLUMN | NOTE-TAKING AREA
+(Questions/Keywords)| (Main notes during lecture/reading)
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+
+SUMMARY SECTION
+===============
+(Write a brief summary of the main points after class)
+
+_________________________________________________________________
+_________________________________________________________________
+_________________________________________________________________
+_________________________________________________________________
+
+HOW TO USE:
+1. Take notes in the right column during class
+2. After class, write questions/keywords in the left column
+3. Cover the right side and test yourself using the cue column
+4. Write a summary at the bottom`
+},
+'goal-setting': {
+name: 'Goal Setting Worksheet',
+content: `ACADEMIC GOAL SETTING WORKSHEET
+===============================
+
+Date: _______________
+
+LONG-TERM GOALS (This Year)
+---------------------------
+1. _________________________________________________
+2. _________________________________________________
+3. _________________________________________________
+
+SHORT-TERM GOALS (This Month)
+-----------------------------
+1. _________________________________________________
+2. _________________________________________________
+3. _________________________________________________
+
+WEEKLY GOALS (This Week)
+-----------------------
+1. _________________________________________________
+2. _________________________________________________
+3. _________________________________________________
+
+DAILY GOALS (Today)
+------------------
+1. _________________________________________________
+2. _________________________________________________
+3. _________________________________________________
+
+GOAL BREAKDOWN
+--------------
+Choose one major goal and break it down:
+
+Main Goal: __________________________________________
+
+Steps needed:
+□ Step 1: ___________________________________________
+□ Step 2: ___________________________________________
+□ Step 3: ___________________________________________
+□ Step 4: ___________________________________________
+□ Step 5: ___________________________________________
+
+Deadline: ___________________________________________
+Reward when completed: ______________________________
+
+OBSTACLES & SOLUTIONS
+--------------------
+Potential obstacles: ________________________________
+How to overcome them: _______________________________
+
+PROGRESS TRACKING
+-----------------
+Week 1: ____________________________________________
+Week 2: ____________________________________________
+Week 3: ____________________________________________
+Week 4: ____________________________________________`
+},
+'pomodoro': {
+name: 'Pomodoro Timer Sheet',
+content: `POMODORO TECHNIQUE TRACKER
+==========================
+
+Date: _______________ Subject: _______________
+
+INSTRUCTIONS:
+- Work for 25 minutes, then take a 5-minute break
+- After 4 pomodoros, take a longer 15-30 minute break
+- Mark completed pomodoros with ✓
+
+SESSION 1
+---------
+Start Time: _______ End Time: _______
+Task: __________________________________
+Completed: □ Notes: ____________________
+
+Break (5 min): _______ to _______
+
+SESSION 2
+---------
+Start Time: _______ End Time: _______
+Task: __________________________________
+Completed: □ Notes: ____________________
+
+Break (5 min): _______ to _______
+
+SESSION 3
+---------
+Start Time: _______ End Time: _______
+Task: __________________________________
+Completed: □ Notes: ____________________
+
+Break (5 min): _______ to _______
+
+SESSION 4
+---------
+Start Time: _______ End Time: _______
+Task: __________________________________
+Completed: □ Notes: ____________________
+
+LONG BREAK (15-30 min): _______ to _______
+
+DAILY SUMMARY
+-------------
+Total Pomodoros Completed: _____
+Most Productive Time: __________
+Biggest Distraction: ___________
+Tomorrow's Priority: ____________
+
+TIPS:
+- Turn off notifications during work sessions
+- Keep a distraction list for thoughts that pop up
+- Adjust break activities to stay refreshed`
+},
+'grade-tracker': {
+name: 'Grade Tracker',
+content: `ACADEMIC GRADE TRACKER
+======================
+
+Student Name: _______________ Semester: _______________
+
+SUBJECT 1: _________________________
+----------------------------------
+Assignment | Date Due | Points | Grade | Notes
+___________________|___________|________|_______|_______
+| | | |
+| | | |
+| | | |
+| | | |
+Current Average: _______ Target Grade: _______
+
+SUBJECT 2: _________________________
+----------------------------------
+Assignment | Date Due | Points | Grade | Notes
+___________________|___________|________|_______|_______
+| | | |
+| | | |
+| | | |
+| | | |
+Current Average: _______ Target Grade: _______
+
+SUBJECT 3: _________________________
+----------------------------------
+Assignment | Date Due | Points | Grade | Notes
+___________________|___________|________|_______|_______
+| | | |
+| | | |
+| | | |
+| | | |
+Current Average: _______ Target Grade: _______
+
+OVERALL GPA CALCULATION
+-----------------------
+Subject 1: _______ × _____ credits = _______
+Subject 2: _______ × _____ credits = _______
+Subject 3: _______ × _____ credits = _______
+Subject 4: _______ × _____ credits = _______
+Subject 5: _______ × _____ credits = _______
+
+Total Points: _______ Total Credits: _______
+Current GPA: _______
+
+IMPROVEMENT PLAN
+----------------
+Subjects needing attention: ____________________
+Action steps: __________________________________
+Study group opportunities: _____________________
+Teacher office hours: __________________________`
+},
+'reading-log': {
+name: 'Reading Log',
+content: `READING LOG
+===========
+
+Name: _______________ Month/Year: _______________
+
+READING GOALS
+-------------
+Books to read this month: _______
+Pages per day goal: _______
+Favorite genres: _______________
+
+BOOK ENTRIES
+------------
+
+BOOK 1
+------
+Title: _____________________________________
+Author: ____________________________________
+Genre: _____________________________________
+Start Date: ____________ End Date: ____________
+Pages: _______ Rating (1-5): _______
+Favorite Character: ____________________________
+Best Quote: ___________________________________
+Summary: ______________________________________
+____________________________________________
+Would recommend? □ Yes □ No
+Why? _____________________________________
+
+BOOK 2
+------
+Title: _____________________________________
+Author: ____________________________________
+Genre: _____________________________________
+Start Date: ____________ End Date: ____________
+Pages: _______ Rating (1-5): _______
+Favorite Character: ____________________________
+Best Quote: ___________________________________
+Summary: ______________________________________
+____________________________________________
+Would recommend? □ Yes □ No
+Why? _____________________________________
+
+BOOK 3
+------
+Title: _____________________________________
+Author: ____________________________________
+Genre: _____________________________________
+Start Date: ____________ End Date: ____________
+Pages: _______ Rating (1-5): _______
+Favorite Character: ____________________________
+Best Quote: ___________________________________
+Summary: ______________________________________
+____________________________________________
+Would recommend? □ Yes □ No
+Why? _____________________________________
+
+MONTHLY REFLECTION
+------------------
+Total books read: _______
+Total pages read: _______
+Favorite book this month: _______________________
+New genres explored: ____________________________
+Reading challenges overcome: ____________________
+Next month's reading goals: _____________________`
+}
+};
+
+const template = templates[templateType];
+if (template) {
+const blob = new Blob([template.content], { type: 'text/plain' });
+const url = URL.createObjectURL(blob);
+const link = document.createElement('a');
+link.href = url;
+link.download = `${template.name.replace(/\s+/g, '_')}.txt`;
+link.click();
+URL.revokeObjectURL(url);
+
+// Show success message
+showDownloadSuccess(template.name);
+}
+}
+
+function downloadAllTemplates() {
+const allTemplates = ['weekly-planner', 'cornell-notes', 'goal-setting', 'pomodoro', 'grade-tracker', 'reading-log'];
+
+allTemplates.forEach((templateType, index) => {
+setTimeout(() => {
+downloadTemplate(templateType);
+}, index * 500); // Stagger downloads by 500ms
+});
+
+showDownloadSuccess('All Study Templates');
+}
+
+function showDownloadSuccess(templateName) {
+const successHtml = `
+<div id="downloadSuccess" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-3xl p-10 max-w-2xl w-full mx-4 text-center shadow-2xl transform animate-bounce">
+<div class="text-8xl mb-6">📥✨</div>
+<h3 class="text-4xl font-bold text-green-600 mb-6">Your Template is Ready!</h3>
+
+<div class="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300 rounded-2xl p-8 mb-8">
+<div class="text-2xl font-bold text-gray-800 mb-6">📁 Find Your Downloaded File Here:</div>
+<div class="space-y-4">
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex items-center justify-center text-gray-700 text-lg">
+<span class="text-3xl mr-4">💻</span>
+<div class="text-left">
+<strong>Windows:</strong><br>
+<span class="text-blue-600 font-mono">This PC → Downloads folder</span>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex items-center justify-center text-gray-700 text-lg">
+<span class="text-3xl mr-4">🍎</span>
+<div class="text-left">
+<strong>Mac:</strong><br>
+<span class="text-blue-600 font-mono">Finder → Downloads folder</span>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex items-center justify-center text-gray-700 text-lg">
+<span class="text-3xl mr-4">📱</span>
+<div class="text-left">
+<strong>Phone/Tablet:</strong><br>
+<span class="text-blue-600 font-mono">Files app → Downloads</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-blue-100 border-2 border-blue-300 rounded-2xl p-6 mb-8">
+<div class="text-lg text-gray-700">
+<div class="text-xl font-bold mb-3">📄 Your File Details:</div>
+<div class="bg-white rounded-lg p-4 mb-4">
+<strong>File name:</strong> <span class="text-blue-600 font-mono text-lg">${templateName.replace(/\s+/g, '_')}.txt</span>
+</div>
+<div class="text-base">
+<strong>💡 How to use:</strong> Open with any text editor (Notepad, TextEdit, Google Docs) or print it out for handwritten notes!
+</div>
+</div>
+</div>
+
+<button onclick="closeDownloadSuccess()" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-12 py-4 rounded-2xl text-xl font-bold hover:from-green-600 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg">
+Perfect! I Found It! 🎉
+</button>
+</div>
+</div>
+`;
+document.body.insertAdjacentHTML('beforeend', successHtml);
+}
+
+function closeDownloadSuccess() {
+const modal = document.getElementById('downloadSuccess');
+if (modal) modal.remove();
+}
+
+// Form submission
+document.getElementById('collaborationForm').addEventListener('submit', function(e) {
+e.preventDefault();
+alert('🌟 Thank you for your submission! In a real implementation, this would be sent via Formspree or similar service.');
+});
+
+// Smooth scroll for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+target.scrollIntoView({
+behavior: 'smooth'
+});
+}
+});
+});
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96cdeebb43b3fee4',t:'MTc1NDgxMjU0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
